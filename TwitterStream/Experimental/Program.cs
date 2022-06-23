@@ -2,8 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Collections.Generic;
 using System.Text.Json;
+using Models.Twitter;
 
 namespace Experimental
 {
@@ -35,31 +35,5 @@ namespace Experimental
                 Console.WriteLine(ex.ToString());
             }
         }
-    }
-
-    public class TwitterStreamResponse
-    {
-        public TweetObject Data { get; set; }
-    }
-
-
-    public class TweetObject
-    {
-        public string Id { get; set; }
-        public string Text { get; set; }
-        public TweetEntity Entities { get; set; }
-
-    }
-
-    public class TweetEntity
-    {
-        public IEnumerable<TweetHashtag> Hashtags { get; set; }
-    }
-
-    public class TweetHashtag
-    {
-        public int Start { get; set; }
-        public int End { get; set; }
-        public string Tag { get; set; }
     }
 }

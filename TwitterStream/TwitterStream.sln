@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental", "Experimental\Experimental.csproj", "{209EC070-F010-4C8A-9B2F-31E8343B4EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Twitter", "Models.Twitter\Models.Twitter.csproj", "{723971BF-2565-4A83-98C5-A07E6FB7AE5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{209EC070-F010-4C8A-9B2F-31E8343B4EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{209EC070-F010-4C8A-9B2F-31E8343B4EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{209EC070-F010-4C8A-9B2F-31E8343B4EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{723971BF-2565-4A83-98C5-A07E6FB7AE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{723971BF-2565-4A83-98C5-A07E6FB7AE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{723971BF-2565-4A83-98C5-A07E6FB7AE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{723971BF-2565-4A83-98C5-A07E6FB7AE5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
