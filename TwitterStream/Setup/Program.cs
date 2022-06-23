@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Runner;
+﻿using Azure.Storage.Queues;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Setup.Migrators;
 using System;
@@ -13,12 +14,17 @@ namespace Setup
             // This setup project only creates the tables.
             var connectionString = "";
 
+            // Run the database migrations.
             var serviceProvider = CreateServices(connectionString);
             using (var scope = serviceProvider.CreateScope())
             {
                 UpdateDatabase(scope.ServiceProvider);
             }
+
+            // Create Azure storage queues.
+            CreateAzureStorageQueues();
         }
+
         private static IServiceProvider CreateServices(string connectionString)
         {
             return new ServiceCollection()
@@ -35,6 +41,13 @@ namespace Setup
         {
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
             runner.MigrateUp();
+        }
+
+        private static void CreateAzureStorageQueues()
+        {
+            var azureStorageConnectionString = "";
+            var queueClient = new QueueClient(azureStorageConnectionString, "tweets");
+            queueClient.CreateIfNotExists();
         }
     }
 }
