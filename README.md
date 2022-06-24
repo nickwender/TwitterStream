@@ -80,5 +80,6 @@ The `TwitterStreamConsumerConsole` project is a little console app that tries to
 1. From Visual Studio, run the `TwitterStream` Azure Functions project
 1. From a terminal window, run the console app: `dotnet run --project TwitterStreamConsumerConsole`
 
-Here is a video of both projects running:
-![Running](running.mp4)
+Below you will find a screenshot of both projects running. The terminal on the left is the Azure Functions project saving tweets. The terminal on the right is the console project queuing tweets.
+
+![Running](running.png)
