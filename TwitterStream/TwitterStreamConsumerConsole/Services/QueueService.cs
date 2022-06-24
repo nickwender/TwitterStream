@@ -18,11 +18,12 @@ namespace TwitterStreamConsumerConsole.Services
 
         public async Task QueueTweet(TweetObject tweet)
         {
+            // TODO: inject a logger and log instead of using the console.
             var serializedTweet = JsonSerializer.Serialize(tweet); 
             Console.WriteLine($"Sending tweet to queue: {serializedTweet}");
 
             // Azure storage queues can take arbitrary string messages.
-            // However, queue triggered Azure Function need the message to be base64 encoded.
+            // However, queue triggered Azure Functions need the message to be base64 encoded.
             var base64EncodedTweet = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedTweet));
             await _queueClient.SendMessageAsync(base64EncodedTweet);
         }

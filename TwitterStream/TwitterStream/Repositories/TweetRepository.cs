@@ -10,24 +10,35 @@ using TwitterStream.Models.Response;
 
 namespace TwitterStream.Repositories
 {
+    /// <summary>
+    /// Repository to persist tweets.
+    /// </summary>
     public class TweetRepository : DisposableRepository, ITweetRepository
     {
         public TweetRepository(IOptions<Configuration> configuration) : base(configuration)
         {
         }
 
+        /// <summary>
+        /// Try to persist a tweet to the database.
+        /// </summary>
+        /// <param name="tweet">The tweet to persist.</param>
+        /// <returns>True if the tweet was persisted.</returns>
         public async Task<bool> AddTweet(TweetObject tweet)
         {
             // TODO: Use Unit of Work pattern to make rollbacks on error easier.
-            // TODO: Use an ORM like Dapper instead of SqlCommand.
+            // TODO: As is, this could orphan a tweet <-> hashtag association.
+            // TODO: Use an ORM (Dapper, EF, ServiceStack.ORMLite, etc) instead of SqlCommand.
+            // TODO: Inject a logger into the repository and log when inserts fail.
 
+            // Insert the tweet (text and Twitter's ID).
             var tweetId = await InsertTweet(tweet);
-
             if (!tweetId.HasValue)
             {
                 return false;
             }
 
+            // Check if the tweet has hashtag to insert.
             if (tweet.Entities?.Hashtags?.Any() ?? false)
             {
                 // Insert each hashtag of the tweet.
@@ -51,6 +62,10 @@ namespace TwitterStream.Repositories
             return true;
         }
 
+        /// <summary>
+        /// Get stats about the tweets.
+        /// </summary>
+        /// <returns></returns>
         public async Task<TweetStats> GetStats()
         {
             var stats = new TweetStats()
@@ -61,6 +76,12 @@ namespace TwitterStream.Repositories
 
             try
             {
+                // An unfortunate limit of this implementation is that the structure of the stats returned is tightly
+                // coupled with the queries below. It would be reasonable to have methods to get tweets and their
+                // associated hashtags and build up the stats in a service layer. That would take the business logic
+                // out of the queries.
+
+                // Get the top 10 most-used hashtags.
                 var query = "SELECT TOP(10) COUNT(th.TweetId) AS HashtagCount, h.Hashtag AS Hashtag"
                           + " FROM Hashtags h WITH (NOLOCK)"
                           + " JOIN TweetHashtags th WITH (NOLOCK)"
@@ -83,6 +104,7 @@ namespace TwitterStream.Repositories
                     }
                 }
 
+                // Get the number of tweets we have on hand.
                 var tweetCountQuery = "SELECT COUNT(1) AS TweetCount FROM Tweets WITH (NOLOCK)";
                 using SqlCommand tweetCountCmd = new SqlCommand(tweetCountQuery, _connection);
                 {
@@ -101,7 +123,7 @@ namespace TwitterStream.Repositories
             }
             catch (Exception)
             {
-                // TODO: add logger.
+                // TODO: Inject a logger into the repository and log this exception.
             }
 
             return stats;
@@ -150,6 +172,11 @@ namespace TwitterStream.Repositories
             return hashtagIds;
         }
 
+        /// <summary>
+        /// Insert a hashtag.
+        /// </summary>
+        /// <param name="hashtag">The hashtag to insert.</param>
+        /// <returns>The ID of the new record.</returns>
         private async Task<int?> InsertHashtag(string hashtag)
         {
             var query = "INSERT INTO Hashtags (Hashtag) OUTPUT INSERTED.ID VALUES(@hashtag)";
@@ -160,6 +187,11 @@ namespace TwitterStream.Repositories
             }
         }
 
+        /// <summary>
+        /// Retrieve a hashtag entity by hashtag text.
+        /// </summary>
+        /// <param name="hashtag">Text of the hashtag to find</param>
+        /// <returns>The hashtag and our ID for it.</returns>
         private async Task<HashtagEntity> GetHashtag(string hashtag)
         {
             HashtagEntity hashtagEntity = null;
@@ -184,7 +216,7 @@ namespace TwitterStream.Repositories
                         }
                         catch (Exception)
                         {
-                            // TODO: add logger.
+                            // TODO: Inject a logger into the repository and log this exception.
                             return null;
                         }
                     }

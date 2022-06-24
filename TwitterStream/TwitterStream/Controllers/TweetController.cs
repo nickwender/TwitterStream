@@ -39,7 +39,6 @@ namespace TwitterStream.Controllers
             ILogger log)
         {
             var stats = await _tweetRepository.GetStats();
-
             return new JsonResult(stats);
         }
     }

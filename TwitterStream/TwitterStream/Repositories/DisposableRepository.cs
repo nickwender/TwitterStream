@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace TwitterStream.Repositories
 {
+    /// <summary>
+    /// A base class for repositories. It takes care of setting up and tearing down database connections.
+    /// </summary>
     public class DisposableRepository : IDisposable
     {
         protected readonly Configuration _configuration;
@@ -23,6 +26,9 @@ namespace TwitterStream.Repositories
             _connection.Open();
         }
 
+        /// <summary>
+        /// Close our database connection so we don't leak connections from the pool.
+        /// </summary>
         public void Dispose()
         {
             if (_connection != null)
@@ -31,6 +37,11 @@ namespace TwitterStream.Repositories
             }
         }
 
+        /// <summary>
+        /// Generic method to insert a record and return the ID of the inserted record.
+        /// </summary>
+        /// <param name="cmd">SqlCommand to execute.</param>
+        /// <returns>The ID of the inserted record or null on error.</returns>
         protected async Task<int?> Insert(SqlCommand cmd)
         {
             try
