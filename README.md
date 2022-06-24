@@ -36,6 +36,12 @@ Make a `GET http://localhost:7071/api/stats` request to get stats. You may need 
 
 ![Stats](stats.png)
 
+### TwitterStream.Tests
+
+The `TwitterStream.Tests` project contains unit tests for the `TwitterStream` project.
+
+![Tests](tests.png)
+
 ### TwitterStreamConsumerConsole
 
 The `TwitterStreamConsumerConsole` is a simple console application that connects to and starts streaming tweets from Twitter's sample stream. This console application drops each tweet onto an Azure StorageAccount Queue. That's all the console application does.

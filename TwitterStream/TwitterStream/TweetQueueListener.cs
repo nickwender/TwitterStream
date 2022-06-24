@@ -34,6 +34,11 @@ namespace TwitterStream
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(tweetJson))
+                {
+                    return;
+                }
+
                 var tweet = JsonConvert.DeserializeObject<TweetObject>(tweetJson);
 
                 if (!IsValid(tweet, log))
