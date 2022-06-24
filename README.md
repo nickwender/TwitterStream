@@ -32,7 +32,7 @@ This project has an [Azure queue storage trigger](https://docs.microsoft.com/en-
 
 Additionally, the Azure Functions project has an [HTTP trigger](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook-trigger?tabs=in-process%2Cfunctionsv2&pivots=programming-language-csharp) that will return statistics about the tweets that have been.
 
-Make a `GET http://localhost:7071/api/stats` request to get stats. You may need to change the port number depeneding to match what Visual Studio uses. You should see a result like this after enough tweets have been collected:
+Make a `GET http://localhost:7071/api/stats` request to get stats. You may need to change the port number to match what Visual Studio uses when running this project. You should see a result like this after enough tweets have been collected:
 
 ![Stats](stats.png)
 
