@@ -13,7 +13,7 @@ namespace TwitterStream.Repositories
         public DisposableRepository(IOptions<Configuration> configuration)
         {
             _configuration = configuration.Value;
-
+            
             // Arguably, this logic could move to a connection factory.
             if (string.IsNullOrWhiteSpace(_configuration.DatabaseConnectionString))
             {

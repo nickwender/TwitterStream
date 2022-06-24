@@ -13,7 +13,7 @@ namespace TwitterStream.Controllers
     /// <summary>
     /// TweetsController has an HTTP trigger that provides statistics about tweets consumed.
     /// </summary>
-    public class TweetController
+    public class TweetController 
     {
         private readonly ITweetRepository _tweetRepository;
         private readonly JsonSerializerSettings _jsonSerializerSettings;

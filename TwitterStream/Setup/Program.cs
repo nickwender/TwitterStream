@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Queues;
 using FluentMigrator.Runner;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Setup.Migrators;
 using System;
@@ -10,19 +11,27 @@ namespace Setup
     {
         static void Main(string[] args)
         {
-            // The database named in the connection string must exist!
-            // This setup project only creates the tables.
-            var connectionString = "";
+            var configuration = LoadAppSettings();
 
             // Run the database migrations.
-            var serviceProvider = CreateServices(connectionString);
+            // The database named in the connection string must exist!
+            // This setup project only creates the tables.
+            var serviceProvider = CreateServices(configuration["AppSettings:DatabaseConnectionString"]);
             using (var scope = serviceProvider.CreateScope())
             {
                 UpdateDatabase(scope.ServiceProvider);
             }
 
+            // The storage account in the connection string must exist.
+            // If using the Azure Storage Emulator, it must be running.
             // Create Azure storage queues.
-            CreateAzureStorageQueues();
+            CreateAzureStorageQueues(configuration["AppSettings:AzureStorageQueueConnectionString"]);
+        }
+        private static IConfigurationRoot LoadAppSettings()
+        {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true);
+            var configuration = builder.Build();
+            return configuration;
         }
 
         private static IServiceProvider CreateServices(string connectionString)
@@ -43,10 +52,9 @@ namespace Setup
             runner.MigrateUp();
         }
 
-        private static void CreateAzureStorageQueues()
+        private static void CreateAzureStorageQueues(string connectionString)
         {
-            var azureStorageConnectionString = "";
-            var queueClient = new QueueClient(azureStorageConnectionString, "tweets");
+            var queueClient = new QueueClient(connectionString, "tweets");
             queueClient.CreateIfNotExists();
         }
     }
