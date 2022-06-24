@@ -5,8 +5,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TwitterStream.Repositories;
-using System.Net.Http;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 
 namespace TwitterStream.Controllers
 {
@@ -35,12 +35,12 @@ namespace TwitterStream.Controllers
         /// <returns></returns>
         [FunctionName("Stats")]
         public async Task<IActionResult> Stats(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             var stats = await _tweetRepository.GetStats();
 
-            return new OkObjectResult(JsonConvert.SerializeObject(stats, _jsonSerializerSettings));
+            return new JsonResult(stats);
         }
     }
 }
