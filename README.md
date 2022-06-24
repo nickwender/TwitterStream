@@ -6,7 +6,7 @@ Architecturally, this project is split into three parts:
 1. A listener that takes tweets off the queue and persists them to a database
 1. A REST endpoint that returns stats about tweets stored in the database
 
-I opted to split things up like this so the tweet streaming console app had very little responsibility and could focus on queuing tweets as quickly as possible. In turn the queue acts a transient storage. Likewise, the queue listener has very little responsibility: grab tweets off the queue and store them in the database. Finally, the REST endpoint just collects stats from the database. With this separation each component could be run in isolation and scaled independently.
+I opted to split things up like this so the tweet streaming console app had very little responsibility and could focus on queuing tweets as quickly as possible. The queue acts as transient storage. Likewise, the queue listener has very little responsibility: grab tweets off the queue and store them in the database. Finally, the REST endpoint just collects stats from the database. With this separation each component could be run in isolation and scaled independently.
 
 ## Code Organization
 
@@ -14,13 +14,13 @@ The solution has several projects.
 
 ### Models.Twitter
 
-The `Models.Twitter` project holds models representing objects supplied from the Twitter API
+The `Models.Twitter` project holds models representing objects supplied from the Twitter API. These models are in a separate project so they can be reused by other projects.
 
 ### Setup
 
-The `Setup` project will create database tables and Azure blob storage queues
+The `Setup` project will create database tables and Azure blob storage queues.
 
-**Note**: this project assumes the database and the Azure blob storage account already exist
+**Note**: this project assumes the database and the Azure blob storage account already exist. See the Configuration section below.
 
 ### TwitterStream
 
@@ -50,6 +50,8 @@ The `TwitterStreamConsumerConsole` is a simple console application that connects
 
 # Setup
 
+Once the above prerequisite software is installed, the tweet consumer and Azure function can be run locally.
+
 ## Configuration
 
 1. Create a new database in your SQL Server instance named `TwitterStream`
@@ -57,9 +59,9 @@ The `TwitterStreamConsumerConsole` is a simple console application that connects
 1. Open the `TwitterStream` solution in Visual Studio
 1. Open the `TwitterStreamConsumerConsole` project's `appsettings.json` file and add your Twitter API Bearer Token
 1. If you are not using a local SQL service / Azure Storage Emulator you will also need to modify these connection strings per project:
-  - `appsettings.json` in the `Setup` project
-  - `appsettings.json` in the `TwitterStreamConsumerConsole` project
-  - `local.settings.json` in the `TwitterStream` project
+   1. `appsettings.json` in the `Setup` project
+   1. `appsettings.json` in the `TwitterStreamConsumerConsole` project
+   1. `local.settings.json` in the `TwitterStream` project
 1. Restore NuGet packages
 1. Build the solution
 1. Run the `Setup` project to create database tables and Azure storage queue
