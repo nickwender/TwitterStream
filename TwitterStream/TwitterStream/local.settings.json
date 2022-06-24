@@ -1,0 +1,9 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureQueueStorageConnectionString": "UseDevelopmentStorage=true",
+    "Configs:DatabaseConnectionString": "Server=localhost;Database=TwitterStream;Trusted_Connection=True"
+  }
+}
